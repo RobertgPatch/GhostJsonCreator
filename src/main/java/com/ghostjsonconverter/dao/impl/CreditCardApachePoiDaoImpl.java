@@ -7,6 +7,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.poi.EncryptedDocumentException;
+import org.apache.poi.hssf.usermodel.HSSFRow;
 import org.apache.poi.openxml4j.exceptions.InvalidFormatException;
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.DataFormatter;
@@ -27,6 +28,7 @@ public class CreditCardApachePoiDaoImpl implements CreditCardDao {
 	private static int CARD_NUMBER_INDEX = 1;
 	private static int EXPIRY_MONTH_INDEX = 2;
 	private static int EXPIRY_YEAR_INDEX = 3;
+	private static int CVV_INDEX = 4;
 	
 	private DataFormatter dataFormatter = new DataFormatter();
 	@Override
@@ -43,18 +45,21 @@ public class CreditCardApachePoiDaoImpl implements CreditCardDao {
 				
 				CreditCard creditCard = null;
 				Iterator<Row> rowIterator = sheet.rowIterator();
-				
+			
 				while (rowIterator.hasNext()) {
-					
-					creditCard = new CreditCard();
 					
 					Row row = rowIterator.next();
 					
+					if (row.getRowNum() == 0) {
+					    continue;
+					}
+					
+					creditCard = new CreditCard();
 					creditCard.setName(getCellAsString(row.getCell(NAME_INDEX)));
 					creditCard.setCardNumber(getCellAsString(row.getCell(CARD_NUMBER_INDEX)));
 					creditCard.setExpiryMonth(getCellAsString(row.getCell(EXPIRY_MONTH_INDEX)));
 					creditCard.setExpiryYear(getCellAsString(row.getCell(EXPIRY_YEAR_INDEX)));
-										
+					creditCard.setCvv(getCellAsString(row.getCell(CVV_INDEX)));
 					// card type is currently static
 					creditCard.setCardType(CARD_TYPE);
 					
