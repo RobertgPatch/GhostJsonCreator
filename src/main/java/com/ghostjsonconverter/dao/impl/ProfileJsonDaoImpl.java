@@ -13,7 +13,7 @@ import com.ghostjsonconverter.model.Profile;
 
 public class ProfileJsonDaoImpl implements ProfileDao {
 	
-	private static String PROFILE_OUTPUT_PATH = "src/main/output/profiles.json";
+	private static String PROFILE_OUTPUT_PATH = "profiles.json";
 	
 	private static JsonFactory jfactory = new JsonFactory();
 	
@@ -22,11 +22,11 @@ public class ProfileJsonDaoImpl implements ProfileDao {
 		try {
 			jGenerator = jfactory.createGenerator(new File(PROFILE_OUTPUT_PATH), JsonEncoding.UTF8);
 			jGenerator.writeStartArray();
-			
+			// write the profile to json file
 			for (Profile profile : profiles) {
 				
 		    	jGenerator.writeStartObject(); // {
-		
+		    	
 		    	jGenerator.writeStringField(ProfileField.ADDRESS.getField(), profile.getCustomer().getFullAddress());
 		    	jGenerator.writeStringField(ProfileField.APT.getField(), profile.getCustomer().getApt());
 		    	jGenerator.writeStringField(ProfileField.CARD_NUMBER.getField(), profile.getCreditCard().getCardNumber());
@@ -49,8 +49,7 @@ public class ProfileJsonDaoImpl implements ProfileDao {
 			jGenerator.writeEndArray();
 			jGenerator.close();
 		} catch (IOException e) {
-			System.out.println("Error with writing JSON file at " + PROFILE_OUTPUT_PATH);
-			e.printStackTrace();
+			System.err.println("Error with writing JSON file at " + PROFILE_OUTPUT_PATH);
 			return -1;
 		}
 		return 1;
